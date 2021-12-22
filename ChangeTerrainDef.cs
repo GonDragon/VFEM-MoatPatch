@@ -15,5 +15,11 @@ namespace VFEM_MoatPatch
         public TerrainDef newTerrain;
 
         public float successChance = 1f;
+
+        public List<ThingDef> resources;
+        public List<int> stackSizes;
+
+        public bool consumeResources = false;
+        public bool spawnResources = false;
     }
 }

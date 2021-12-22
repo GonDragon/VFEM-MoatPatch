@@ -57,13 +57,24 @@ namespace VFEM_MoatPatch
             }
 
         }
-        public static TerrainDef HandleDig(TerrainDef def)
+        public static TerrainDef HandleDig(TerrainDef def, IntVec3 c, Map map)
         {
             try
             {
                 DigTerrainDef digTerrain = digTerrainRelation[def];
                 if (Rand.Chance(digTerrain.successChance))
+                {
+                    if(digTerrain.spawnResources)
+                    {
+                        for(int i = 0; i < digTerrain.resources.Count; i++)
+                        {
+                            Thing thing = ThingMaker.MakeThing(digTerrain.resources[i]);
+                            thing.stackCount = digTerrain.stackSizes[i];
+                            GenPlace.TryPlaceThing(thing,c,map,ThingPlaceMode.Direct);
+                        }
+                    }
                     return digTerrain.newTerrain;
+                }                    
                 return digTerrain.terrain;
             } catch
             {

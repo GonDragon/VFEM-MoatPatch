@@ -16,6 +16,8 @@ namespace VFEM_MoatPatch
     internal class VFEM_JobDriver_DigTerrain_Patch
     {
         internal static MethodInfo HandleDig = AccessTools.Method(typeof(TerrainHandler), nameof(TerrainHandler.HandleDig));
+        internal static MethodInfo GetMap = AccessTools.Property(typeof(JobDriver_DigTerrain), "Map").GetMethod;
+
         internal static IEnumerable<CodeInstruction> Transpiler(ILGenerator gen, IEnumerable<CodeInstruction> instructions)
         {
             bool found = false;
@@ -39,7 +41,10 @@ namespace VFEM_MoatPatch
                     if(code.opcode == OpCodes.Ldarg_0) //Insert a call to custom handler after the switch code. TerrainDef is already on the stack.
                     {
                         Mod.Debug("Patching on Ldarg_0 on Dig");
-                        yield return new CodeInstruction(OpCodes.Call, HandleDig);
+                        yield return new CodeInstruction(OpCodes.Ldarg_1); //IntVec3 c
+                        yield return new CodeInstruction(OpCodes.Ldarg_0); //this ->
+                        yield return new CodeInstruction(OpCodes.Call, GetMap); //this.map
+                        yield return new CodeInstruction(OpCodes.Call, HandleDig); 
                         yield return new CodeInstruction(OpCodes.Stloc_1);
                         yield return code;
                         patched = true;
