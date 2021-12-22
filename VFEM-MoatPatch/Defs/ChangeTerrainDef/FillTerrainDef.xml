@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <VFEM_MoatPatch.FillTerrainDef>
+        <defName>GD_F_MossyTerrain</defName>
+        <terrain>MossyTerrain</terrain>
+        <newTerrain>Soil</newTerrain>
+    </VFEM_MoatPatch.FillTerrainDef>
+
+    <VFEM_MoatPatch.FillTerrainDef>
+        <defName>GD_F_Sand</defName>
+        <terrain>Sand</terrain>
+        <newTerrain>SoftSand</newTerrain>
+    </VFEM_MoatPatch.FillTerrainDef>
+
+    <VFEM_MoatPatch.FillTerrainDef>
+        <defName>GD_F_Gravel</defName>
+        <terrain>Gravel</terrain>
+        <newTerrain>Sand</newTerrain>
+    </VFEM_MoatPatch.FillTerrainDef>
+
+    <VFEM_MoatPatch.FillTerrainDef>
+        <defName>GD_F_MarshyTerrain</defName>
+        <terrain>MarshyTerrain</terrain>
+        <newTerrain>MossyTerrain</newTerrain>
+    </VFEM_MoatPatch.FillTerrainDef>
+</Defs>

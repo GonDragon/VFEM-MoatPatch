@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Defs>
+    <VFEM_MoatPatch.DigTerrainDef>
+        <defName>GD_D_Soil</defName>
+        <terrain>Soil</terrain>
+        <newTerrain>MossyTerrain</newTerrain>
+    </VFEM_MoatPatch.DigTerrainDef>
+
+    <VFEM_MoatPatch.DigTerrainDef>
+        <defName>GD_D_SoilRich</defName>
+        <terrain>SoilRich</terrain>
+        <newTerrain>MossyTerrain</newTerrain>
+    </VFEM_MoatPatch.DigTerrainDef>
+
+    <VFEM_MoatPatch.DigTerrainDef>
+        <defName>GD_D_SoftSand</defName>
+        <terrain>SoftSand</terrain>
+        <newTerrain>Sand</newTerrain>
+    </VFEM_MoatPatch.DigTerrainDef>
+
+    <VFEM_MoatPatch.DigTerrainDef>
+        <defName>GD_D_Sand</defName>
+        <terrain>Sand</terrain>
+        <newTerrain>Gravel</newTerrain>
+        <successChance>0.5</successChance>
+    </VFEM_MoatPatch.DigTerrainDef>
+
+    <VFEM_MoatPatch.DigTerrainDef>
+        <defName>GD_D_MossyTerrain</defName>
+        <terrain>MossyTerrain</terrain>
+        <newTerrain>MarshyTerrain</newTerrain>
+    </VFEM_MoatPatch.DigTerrainDef>
+
+    <VFEM_MoatPatch.DigTerrainDef>
+        <defName>GD_D_MarshyTerrain</defName>
+        <terrain>MarshyTerrain</terrain>
+        <newTerrain>Marsh</newTerrain>
+    </VFEM_MoatPatch.DigTerrainDef>
+
+    <VFEM_MoatPatch.DigTerrainDef>
+        <defName>GD_D_Marsh</defName>
+        <terrain>Marsh</terrain>
+        <newTerrain>WaterShallow</newTerrain>
+    </VFEM_MoatPatch.DigTerrainDef>
+
+    <VFEM_MoatPatch.DigTerrainDef>
+        <defName>GD_D_Gravel</defName>
+        <terrain>Gravel</terrain>
+        <newTerrain>WaterShallow</newTerrain>
+    </VFEM_MoatPatch.DigTerrainDef>
+</Defs>

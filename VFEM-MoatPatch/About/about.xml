@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModMetaData>
+  <packageId>GonDragon.VFEM.MoatPatch</packageId>
+  <name>VFE Medieval: Moat Changes</name>
+  <author>GonDragon</author>
+  <description>Small patch on how moats works on Vanilla Faction Expanded: Medieval. It also adds a small API for ease of modding.</description>
+  <supportedVersions>
+    <li>1.3</li>
+  </supportedVersions>
+  <modDependencies>
+    <li>
+      <packageId>OskarPotocki.VanillaFactionsExpanded.MedievalModule</packageId>
+      <displayName>Vanilla Factions Expanded - Medieval</displayName>
+      <steamWorkshopUrl>https://steamcommunity.com/sharedfiles/filedetails/?id=2023513450</steamWorkshopUrl>
+    </li>
+  </modDependencies>
+  <loadAfter>
+    <li>OskarPotocki.VanillaFactionsExpanded.MedievalModule</li>
+  </loadAfter>
+</ModMetaData>
