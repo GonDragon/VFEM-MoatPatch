@@ -27,43 +27,32 @@ namespace VFEM_MoatPatch
 
             DefDatabase<TerrainListDef>.GetNamed("VFEM_MoatableTerrain").terrainDefs.Clear();
 
+            HashSet<TerrainDef> moatableTerrain = new HashSet<TerrainDef>();
+
             foreach (DigTerrainDef digTerrain in DefDatabase<DigTerrainDef>.AllDefs)
             {
+                moatableTerrain.Add(digTerrain.terrain);
+                moatableTerrain.Add(digTerrain.newTerrain);
                 digTerrainRelation[digTerrain.terrain] = digTerrain;
-                if (!digTerrain.terrain.affordances.Contains(VFEM_DefOf.VFEM_Moatable))
-                {
-                    digTerrain.terrain.affordances.Add(VFEM_DefOf.VFEM_Moatable);
-                }
-
-                if (!DefDatabase<TerrainListDef>.GetNamed("VFEM_MoatableTerrain").terrainDefs.Contains(digTerrain.terrain))
-                {
-                    DefDatabase<TerrainListDef>.GetNamed("VFEM_MoatableTerrain").terrainDefs.Add(digTerrain.terrain);
-                }
-
             }
 
             foreach (FillTerrainDef fillTerrain in DefDatabase<FillTerrainDef>.AllDefs)
             {
+                moatableTerrain.Add(fillTerrain.terrain);
+                moatableTerrain.Add(fillTerrain.newTerrain);
                 fillTerrainRelation[fillTerrain.terrain] = fillTerrain;
-                if (!fillTerrain.terrain.affordances.Contains(VFEM_DefOf.VFEM_Moatable))
-                {
-                    fillTerrain.terrain.affordances.Add(VFEM_DefOf.VFEM_Moatable);
-                }
-
-                if (!DefDatabase<TerrainListDef>.GetNamed("VFEM_MoatableTerrain").terrainDefs.Contains(fillTerrain.terrain))
-                {
-                    DefDatabase<TerrainListDef>.GetNamed("VFEM_MoatableTerrain").terrainDefs.Add(fillTerrain.terrain);
-                }
-
             }
 
-            foreach(TerrainDef terrainDef in digTerrainRelation.Keys)
+            foreach(TerrainDef def in moatableTerrain)
+            {
+                if (!def.affordances.Contains(VFEM_DefOf.VFEM_Moatable))
+                    def.affordances.Add(VFEM_DefOf.VFEM_Moatable);
+                DefDatabase<TerrainListDef>.GetNamed("VFEM_MoatableTerrain").terrainDefs.Add(def);
+            }
+
+            foreach(TerrainDef terrainDef in moatableTerrain)
             {
                 if (!fillTerrainRelation.ContainsKey(terrainDef) && !terrainDef.IsWater) HighestLevel.Add(terrainDef.defName);
-            }
-
-            foreach (TerrainDef terrainDef in fillTerrainRelation.Keys)
-            {
                 if (!digTerrainRelation.ContainsKey(terrainDef)) DeepestLevel.Add(terrainDef.defName);
             }
 

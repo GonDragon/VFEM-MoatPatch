@@ -163,4 +163,50 @@ namespace VFEM_MoatPatch
             }
         }
     }
+
+    [HarmonyPatch]
+    internal class VFEM_Designator_DigTerrain_Patch
+    {
+        static MethodBase TargetMethod()
+        {
+            Type type = AccessTools.TypeByName("VFEMedieval.Designator_DigTerrain");
+            return AccessTools.Method(type, "CanDesignateCell");
+        }
+
+        internal static MethodInfo CheckIfDeepest = AccessTools.Method(typeof(TerrainHandler), nameof(TerrainHandler.CheckIfDeepest));
+        internal static IEnumerable<CodeInstruction> Transpiler(ILGenerator gen, IEnumerable<CodeInstruction> instructions)
+        {
+            bool found = false;
+            bool patched = false;
+
+            foreach (CodeInstruction code in instructions)
+            {
+                if (!found)
+                {
+                    if (code.operand == (object)"WaterShallow") // Here is where the comparation with TerrainDef.Named("WaterShallow") starts
+                    {
+                        Mod.Debug("WaterShallow string found on Dig CanDesignateCell");
+                        found = true;
+                    }
+                    else
+                    {
+                        yield return code;
+                    }
+                }
+                else if (!patched)
+                {
+                    if (code.opcode == OpCodes.Ceq) //The comparation ends on Ceq. Replace the comparation with a custom boolean function.
+                    {
+                        Mod.Debug("Patching after the Ceq on Dig CanDesignateCell");
+                        yield return new CodeInstruction(OpCodes.Call, CheckIfDeepest);
+                        patched = true;
+                    }
+                }
+                else
+                {
+                    yield return code;
+                }
+            }
+        }
+    }
 }
