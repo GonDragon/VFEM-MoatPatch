@@ -103,10 +103,15 @@ namespace VFEM_MoatPatch
         }
 
         internal static MethodInfo CheckIfHighest = AccessTools.Method(typeof(TerrainHandler), nameof(TerrainHandler.CheckIfHighest));
+        internal static MethodInfo IsWater = AccessTools.Property(typeof(TerrainDef), "IsWater").GetMethod;
         internal static IEnumerable<CodeInstruction> Transpiler(ILGenerator gen, IEnumerable<CodeInstruction> instructions)
         {
             bool found = false;
             bool patched = false;
+
+            bool found2 = false;
+            bool patched2 = false;
+
             foreach (CodeInstruction code in instructions)
             {
                 if (!found)
@@ -128,6 +133,27 @@ namespace VFEM_MoatPatch
                         Mod.Debug("Patching after the Ceq on Fill CanDesignateCell");
                         yield return new CodeInstruction(OpCodes.Call, CheckIfHighest);
                         patched = true;
+                    }
+                }
+                else if (!found2)
+                {
+                    if (code.operand == (object)"WaterShallow") // Here is where the comparation with TerrainDef.Named("WaterShallow") starts
+                    {
+                        Mod.Debug("WaterShallow string found on Fill CanDesignateCell");
+                        found2 = true;
+                    }
+                    else
+                    {
+                        yield return code;
+                    }
+                }
+                else if (!patched2)
+                {
+                    if (code.opcode == OpCodes.Ceq) //The comparation ends on Ceq. Replace two comparations with a IsWater TerrainDef call.
+                    {
+                        Mod.Debug("Patching after the Ceq on Fill CanDesignateCell for water check");
+                        yield return new CodeInstruction(OpCodes.Callvirt, IsWater);
+                        patched2 = true;
                     }
                 }
                 else
