@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChangeTerrainDef.cs" />
+    <Compile Include="FillTerrainDef.cs" />
     <Compile Include="DigTerrainDef.cs" />
     <Compile Include="Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -14,14 +14,21 @@ namespace VFEM_MoatPatch
     public static class TerrainHandler
     {
         private static readonly Dictionary<TerrainDef, DigTerrainDef> digTerrainRelation;
+        private static readonly Dictionary<TerrainDef, FillTerrainDef> fillTerrainRelation;
+
+        public static readonly HashSet<string> HighestLevel;
+        public static readonly HashSet<string> DeepestLevel;
         static TerrainHandler()
         {
-            DefDatabase<TerrainListDef>.GetNamed("VFEM_MoatableTerrain").terrainDefs.Clear();
             digTerrainRelation = new Dictionary<TerrainDef, DigTerrainDef>();
+            fillTerrainRelation = new Dictionary<TerrainDef, FillTerrainDef>();
+            HighestLevel = new HashSet<string>();
+            DeepestLevel = new HashSet<string>();
 
-            foreach(DigTerrainDef digTerrain in DefDatabase<DigTerrainDef>.AllDefs)
+            DefDatabase<TerrainListDef>.GetNamed("VFEM_MoatableTerrain").terrainDefs.Clear();
+
+            foreach (DigTerrainDef digTerrain in DefDatabase<DigTerrainDef>.AllDefs)
             {
-                Mod.Debug(string.Format("DefName: {0} - Converts {1} to {2}.",digTerrain.defName,digTerrain.terrain.defName,digTerrain.newTerrain.defName));
                 digTerrainRelation[digTerrain.terrain] = digTerrain;
                 if (!digTerrain.terrain.affordances.Contains(VFEM_DefOf.VFEM_Moatable))
                 {
@@ -34,6 +41,32 @@ namespace VFEM_MoatPatch
                 }
 
             }
+
+            foreach (FillTerrainDef fillTerrain in DefDatabase<FillTerrainDef>.AllDefs)
+            {
+                fillTerrainRelation[fillTerrain.terrain] = fillTerrain;
+                if (!fillTerrain.terrain.affordances.Contains(VFEM_DefOf.VFEM_Moatable))
+                {
+                    fillTerrain.terrain.affordances.Add(VFEM_DefOf.VFEM_Moatable);
+                }
+
+                if (!DefDatabase<TerrainListDef>.GetNamed("VFEM_MoatableTerrain").terrainDefs.Contains(fillTerrain.terrain))
+                {
+                    DefDatabase<TerrainListDef>.GetNamed("VFEM_MoatableTerrain").terrainDefs.Add(fillTerrain.terrain);
+                }
+
+            }
+
+            foreach(TerrainDef terrainDef in digTerrainRelation.Keys)
+            {
+                if (!fillTerrainRelation.ContainsKey(terrainDef)) HighestLevel.Add(terrainDef.defName);
+            }
+
+            foreach (TerrainDef terrainDef in fillTerrainRelation.Keys)
+            {
+                if (!digTerrainRelation.ContainsKey(terrainDef)) DeepestLevel.Add(terrainDef.defName);
+            }
+
         }
         public static TerrainDef HandleDig(TerrainDef def)
         {
@@ -45,9 +78,35 @@ namespace VFEM_MoatPatch
                 return digTerrain.terrain;
             } catch
             {
-                Mod.Error("No terrain found!");
+                Mod.Error("No terrain found! Digging" + def?.defName);
                 return (TerrainDef)null;
             }
+        }
+
+        public static TerrainDef HandleFill(TerrainDef def)
+        {
+            try
+            {
+                FillTerrainDef fillTerrain = fillTerrainRelation[def];
+                if (Rand.Chance(fillTerrain.successChance))
+                    return fillTerrain.newTerrain;
+                return fillTerrain.terrain;
+            }
+            catch
+            {
+                Mod.Error("No terrain found! Filling" + def?.defName);
+                return (TerrainDef)null;
+            }
+        }
+
+        public static bool CheckIfHighest(TerrainDef def)
+        {
+            return HighestLevel.Contains(def.defName);
+        }
+
+        public static bool CheckIfDeepest(TerrainDef def)
+        {
+            return DeepestLevel.Contains(def.defName);
         }
     }
 }
