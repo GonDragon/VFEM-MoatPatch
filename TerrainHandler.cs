@@ -59,7 +59,7 @@ namespace VFEM_MoatPatch
 
             foreach(TerrainDef terrainDef in digTerrainRelation.Keys)
             {
-                if (!fillTerrainRelation.ContainsKey(terrainDef)) HighestLevel.Add(terrainDef.defName);
+                if (!fillTerrainRelation.ContainsKey(terrainDef) && !terrainDef.IsWater) HighestLevel.Add(terrainDef.defName);
             }
 
             foreach (TerrainDef terrainDef in fillTerrainRelation.Keys)

@@ -92,4 +92,49 @@ namespace VFEM_MoatPatch
             }
         }
     }
+
+    [HarmonyPatch]
+    internal class VFEM_Designator_FillTerrain_Patch
+    {
+        static MethodBase TargetMethod()
+        {
+            Type type = AccessTools.TypeByName("VFEMedieval.Designator_FillTerrain");
+            return AccessTools.Method(type, "CanDesignateCell");
+        }
+
+        internal static MethodInfo CheckIfHighest = AccessTools.Method(typeof(TerrainHandler), nameof(TerrainHandler.CheckIfHighest));
+        internal static IEnumerable<CodeInstruction> Transpiler(ILGenerator gen, IEnumerable<CodeInstruction> instructions)
+        {
+            bool found = false;
+            bool patched = false;
+            foreach (CodeInstruction code in instructions)
+            {
+                if (!found)
+                {
+                    if (code.operand == (object)"Soil") // Here is where the comparation with TerrainDef.Named("Soil") starts
+                    {
+                        Mod.Debug("Soil string found on Fill CanDesignateCell");
+                        found = true;
+                    }
+                    else
+                    {
+                        yield return code;
+                    }
+                }
+                else if (!patched)
+                {
+                    if (code.opcode == OpCodes.Ceq) //The comparation ends on Ceq. Replace the comparation with a custom boolean function.
+                    {
+                        Mod.Debug("Patching after the Ceq on Fill CanDesignateCell");
+                        yield return new CodeInstruction(OpCodes.Call, CheckIfHighest);
+                        patched = true;
+                    }
+                }
+                else
+                {
+                    yield return code;
+                }
+            }
+        }
+    }
 }
