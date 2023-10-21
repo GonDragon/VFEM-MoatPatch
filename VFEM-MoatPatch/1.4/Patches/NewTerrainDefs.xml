@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Patch>
+  <!-- <Operation Class="PatchOperationReplace"> -->
+  <!-- <xpath>Defs/VFEMedieval.TerrainListDef[defName="VFEM_MoatableTerrain"]/terrainPairsDefault</xpath> -->
+  <!-- <value> -->
+    <!-- <li><from>Soil</from><to>MossyTerrain</to></li> -->
+    <!-- <li><from>SoilRich</from><to>MossyTerrain</to></li> -->
+    <!-- <li><from>MossyTerrain</from><to>MarshyTerrain</to></li> -->
+    <!-- <li><from>MarshyTerrain</from><to>WaterShallow</to></li> -->
+    <!-- <li><from>SoftSand</from><to>Sand</to></li> -->
+    <!-- <li><from>Sand</from><to>Gravel</to></li> -->
+  <!-- </value> -->
+  <!-- </Operation> -->
+
+<Operation Class="PatchOperationSequence">
+    <success>Always</success>
+    <operations>
+        <li Class="PatchOperationRemove">
+            <xpath>Defs/VFEMedieval.TerrainListDef[defName="VFEM_MoatableTerrain"]/terrainPairsDefault/li</xpath>
+        </li>
+        <li Class="PatchOperationAdd">
+            <xpath>Defs/VFEMedieval.TerrainListDef[defName="VFEM_MoatableTerrain"]/terrainPairsDefault</xpath>
+            <value>
+                <li><from>Soil</from><to>MossyTerrain</to></li>
+            </value>
+        </li>
+        <li Class="PatchOperationAdd">
+            <xpath>Defs/VFEMedieval.TerrainListDef[defName="VFEM_MoatableTerrain"]/terrainPairsDefault</xpath>
+            <value>
+                <li><from>SoilRich</from><to>MossyTerrain</to></li>
+            </value>
+        </li>
+        <li Class="PatchOperationAdd">
+            <xpath>Defs/VFEMedieval.TerrainListDef[defName="VFEM_MoatableTerrain"]/terrainPairsDefault</xpath>
+            <value>
+                <li><from>MossyTerrain</from><to>MarshyTerrain</to></li>
+            </value>
+        </li>
+        <li Class="PatchOperationAdd">
+            <xpath>Defs/VFEMedieval.TerrainListDef[defName="VFEM_MoatableTerrain"]/terrainPairsDefault</xpath>
+            <value>
+                <li><from>MarshyTerrain</from><to>WaterShallow</to></li>
+            </value>
+        </li>
+        <li Class="PatchOperationAdd">
+            <xpath>Defs/VFEMedieval.TerrainListDef[defName="VFEM_MoatableTerrain"]/terrainPairsDefault</xpath>
+            <value>
+                <li><from>SoftSand</from><to>Sand</to></li>
+            </value>
+        </li>
+        <li Class="PatchOperationAdd">
+            <xpath>Defs/VFEMedieval.TerrainListDef[defName="VFEM_MoatableTerrain"]/terrainPairsDefault</xpath>
+            <value>
+                <li><from>Sand</from><to>Gravel</to></li>
+            </value>
+        </li>
+    </operations>
+</Operation>
+
+</Patch>
